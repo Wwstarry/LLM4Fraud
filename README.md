@@ -1,2 +1,2 @@
-# LLM4-Fraud
+# LLM4Fraud
 LLM for Fraud Detection
