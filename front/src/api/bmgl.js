@@ -1,4 +1,4 @@
-const ak = 'iCU1OqsTVB0uhqe0nlCkdxbZdZj3uNIo'
+const ak = 'key'
 
 /**
  * 异步加载百度地图
