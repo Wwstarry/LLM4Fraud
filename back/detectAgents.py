@@ -5,8 +5,7 @@ from relatedGraph.graphConstruction import updateGraph
 detectAgents = Blueprint('detectAgents', __name__)
 import os
 
-os.environ["OPENAI_API_KEY"] = "sk-INXANUofc0XdCz4Q88C47aB7Aa6541AfAbE294673e1fE71d"
-os.environ["OPENAI_API_BASE"] = "https://api.b3n.fun/v1"
+
 
 
 # os.environ["OPENAI_API_KEY"] = ""

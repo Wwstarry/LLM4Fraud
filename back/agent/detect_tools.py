@@ -26,9 +26,9 @@ def get_package_name(
     print("Database connection established successfully.")
     cursor = conn.cursor()
 
-    # 查询具体的 md5 对应的记录
+
     cursor.execute("SELECT Package_Name FROM Apk WHERE MD5=?", (md5,))
-    info = cursor.fetchone()  # 假设只返回一条结果
+    info = cursor.fetchone()  
 
     cursor.close()
     conn.close()
@@ -47,10 +47,8 @@ def get_name(
     conn = sqlite3.connect('./database.sqlite')
     cursor = conn.cursor()
 
-    # 查询具体的 md5 对应的记录
     cursor.execute("SELECT App_Name FROM Apk WHERE MD5=?", (md5,))
-    info = cursor.fetchone()  # 假设只返回一条结果
-
+    info = cursor.fetchone() 
     cursor.close()
     conn.close()
 
@@ -68,9 +66,9 @@ def get_activaties(
     conn = sqlite3.connect('./database.sqlite')
     cursor = conn.cursor()
 
-    # 查询具体的 md5 对应的记录
+
     cursor.execute("SELECT Main_Activity, Activities FROM Apk WHERE MD5=?", (md5,))
-    info = cursor.fetchone()  # 假设只返回一条结果
+    info = cursor.fetchone()  
 
     cursor.close()
     conn.close()
@@ -89,9 +87,9 @@ def get_service_reciver(
     conn = sqlite3.connect('./database.sqlite')
     cursor = conn.cursor()
 
-    # 查询具体的 md5 对应的记录
+
     cursor.execute("SELECT Services, Receivers FROM Apk WHERE MD5=?", (md5,))
-    info = cursor.fetchone()  # 假设只返回一条结果
+    info = cursor.fetchone() 
 
     cursor.close()
     conn.close()
@@ -110,9 +108,9 @@ def get_permissions(
     conn = sqlite3.connect('./database.sqlite')
     cursor = conn.cursor()
 
-    # 查询具体的 md5 对应的记录
+    
     cursor.execute("SELECT Permissions FROM Apk WHERE MD5=?", (md5,))
-    info = cursor.fetchone()  # 假设只返回一条结果
+    info = cursor.fetchone() 
 
     cursor.close()
     conn.close()
@@ -131,7 +129,7 @@ def get_certificate(
     conn = sqlite3.connect('./database.sqlite')
     cursor = conn.cursor()
 
-    # 查询具体的 md5 对应的记录
+
     cursor.execute("""
         SELECT
             Cert_SHA1,
@@ -144,12 +142,11 @@ def get_certificate(
         FROM Apk
         WHERE MD5=?
     """, (md5,))
-    cert_info = cursor.fetchone()  # 假设只返回一条结果
+    cert_info = cursor.fetchone() 
 
     cursor.close()
     conn.close()
 
-    # 合并查询结果为一个字符串返回
     if cert_info:
         result = f"""
         Cert_SHA1: {cert_info[0]},
@@ -176,16 +173,15 @@ def get_icon_prob(
     conn = sqlite3.connect('./database.sqlite')
     cursor = conn.cursor()
     sys.path.append('../')
-    # 查询具体的 md5 对应的记录
-    cursor.execute("SELECT Logo_Path FROM Apk WHERE MD5=?", (md5,))
-    info = cursor.fetchone()  # 假设只返回一条结果
 
+    cursor.execute("SELECT Logo_Path FROM Apk WHERE MD5=?", (md5,))
+    info = cursor.fetchone()  
     cursor.close()
 
     if info:
-        # 处理路径，确保路径格式正确
+       
         logo_path = info[0]
-        logo_path = os.path.abspath(logo_path)  # 将相对路径转换为绝对路径
+        logo_path = os.path.abspath(logo_path)  
         result = icon_predict(logo_path, "./detectionModels/iconModel")
         cursor = conn.cursor()
         cursor.execute(f"UPDATE Result SET icon_black={result[0]}, icon_gamble={result[1]}, icon_scam={result[2]}, \
@@ -211,7 +207,7 @@ def get_content_prob(
     conn = sqlite3.connect('./database.sqlite')
     cursor = conn.cursor()
 
-    # 查询具体的 md5 对应的记录
+
     cursor.execute("""
         SELECT 
             Package_Name, 
@@ -223,16 +219,15 @@ def get_content_prob(
         FROM Apk 
         WHERE MD5=?
     """, (md5,))
-    info = cursor.fetchone()  # 假设只返回一条结果
+    info = cursor.fetchone() 
 
     cursor.close()
 
 
     if info:
-        # 构建 combined_text 字段
+
         combined_text = f"{info[0]} {info[1]} {info[2]} {info[3]} {info[4]} {info[5]}"
 
-        # 调用文本预测函数
         result = text_predict(combined_text, "./detectionModels/textModel")
         cursor = conn.cursor()
         cursor.execute(f"UPDATE Result SET content_black={result[0]}, content_gamble={result[1]}, content_scam={result[2]}, \
@@ -254,7 +249,7 @@ def get_relation(
     :param md5:
     :return: MD5 code and similarity and app name
     """
-    # 读取图数据
+
     try:
         with open('./relatedGraph/graph.json', 'r') as f:
             data = json.load(f)
@@ -262,7 +257,6 @@ def get_relation(
     except FileNotFoundError:
         return "Graph data not found"
 
-    # 找到与指定MD5对应的节点
     target_node = None
     for node, attrs in G.nodes(data=True):
         if attrs.get('md5') == md5:
@@ -272,9 +266,8 @@ def get_relation(
     if not target_node:
         return "MD5 not found in graph"
 
-    # 找到与目标节点相连的一阶子图
     neighbors = [(neighbor, G[target_node][neighbor]['weight']) for neighbor in G.neighbors(target_node)]
-    # 按相似度权重排序，取前三个
+ 
     top_neighbors = sorted(neighbors, key=lambda x: x[1], reverse=True)[:3]
 
     subgraph = {}
