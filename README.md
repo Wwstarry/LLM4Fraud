@@ -84,7 +84,7 @@ npm run dev
 
 ### 4. Access the interface
 
-Open your browser and go to: [http://localhost:5000](http://localhost:5000)
+Open your browser and go to: [http://localhost:5173](http://localhost:5173)
 
 Login with the following credentials:
 
