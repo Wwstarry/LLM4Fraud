@@ -15,6 +15,8 @@ Firstly, users upload an APK file through the frontend. Then AgentDroid performs
 
 The complete dataset (about 11 GB) is avaliable at [https://caiyun.139.com/w/i/2oRhigu9XsAa5](https://caiyun.139.com/w/i/2oRhigu9XsAa5). Password: c6oh.
 
+You can also download the original dataset at ... (I will upload it today 11.21)
+
 ## Package Requirements
 
 AgentDroid requires:
